@@ -7,6 +7,7 @@
 </p>
 
 Markdown Table Of Contents is a straightforward command-line tool designed to generate a table of contents for your Markdown files based on titles.
+This project use the [markdown reader/writer](https://github.com/anotherhadi/markdown) package.
 
 ## Features
 
