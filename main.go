@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"regexp"
@@ -18,33 +19,64 @@ func formatTitle(title string) string {
 }
 
 func main() {
-	if len(os.Args) <= 1 {
-		fmt.Println("Usage: markdown-table-of-contents [markdownfile.md] <Identation string>")
+	var indentationString string
+	var depth int
+
+	flag.StringVar(&indentationString, "indent", "  ", "Indentation string ('  ','tab')")
+	flag.IntVar(&depth, "depth", 3, "Depth of the table of contents (1,2,...,6). 2 will print only H1 and H2")
+
+	flag.Parse()
+
+	var filePath string
+	if len(flag.Args()) < 1 {
+		fmt.Println("Usage: markdown-table-of-contents [markdownfile.md]")
+		fmt.Println("Type 'markdown-table-of-contents -h' for help")
 		os.Exit(1)
 	}
+	filePath = flag.Args()[0]
 
-	indentationString := "  " // By default, use 2 spaces
-	if len(os.Args) > 2 {
-		indentationString = os.Args[2]
-	}
-
-	filePath := os.Args[1]
 	md := markdown.New(filePath)
 	err := md.Read()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	str := ""
+
+	var strs []string = []string{}
 	for _, section := range md.Sections {
 		if section.SectionType == markdown.NullSection {
 			continue
 		}
 
 		numberOfSpaces := len(string(section.SectionType)) - 1
+		if numberOfSpaces+1 > depth {
+			continue
+		}
+		var str string
 		str += strings.Repeat(indentationString, numberOfSpaces)
 		str += "- [" + section.Text + "](#" + formatTitle(section.Text) + ")"
-		str += "\n"
+		strs = append(strs, str)
 	}
-	fmt.Println(str)
+
+	// If all start with indent, remove all
+	for {
+		allStartWithIndent := true
+		for _, str := range strs {
+			if !strings.HasPrefix(str, indentationString) {
+				allStartWithIndent = false
+				break
+			}
+		}
+		if allStartWithIndent {
+			for i := range strs {
+				strs[i] = strs[i][len(indentationString):]
+			}
+		} else {
+			break
+		}
+	}
+
+	for _, str := range strs {
+		fmt.Println(str)
+	}
 }

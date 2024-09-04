@@ -29,6 +29,15 @@ Markdown Table Of Contents is a straightforward command-line tool designed to ge
 
 3. **Output**: The tool will generate a table of contents based on the headings in your Markdown file.
 
+**Arguments:**
+
+```txt
+  -depth int
+        Depth of the table of contents (1,2,...,6). 2 will print only H1 and H2 (default 3)
+  -indent string
+        Indentation string ('  ','tab') (default "  ")
+```
+
 ## Example
 
 Suppose you have a Markdown file named `example.md` with the following headings:
@@ -63,6 +72,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Todolist
 
-- If no H1, or H2, ..., trim spaces before
-- Parse command line arguments
 - Replace from file with {table_of_contents} tag or something
