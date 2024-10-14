@@ -37,6 +37,8 @@ This project use the [markdown reader/writer](https://github.com/anotherhadi/mar
         Depth of the table of contents (1,2,...,6). 2 will print only H1 and H2 (default 3)
   -indent string
         Indentation string ('  ','tab') (default "  ")
+  -start-by int
+        Start by specific header (1,2,...,6). 2 will start by H2 (default 1)
 ```
 
 ## Example
@@ -74,3 +76,4 @@ This project is licensed under the [MIT License](LICENSE).
 ## Todolist
 
 - Replace from file with {table_of_contents} tag or something
+- Ignore H1, H2 or anything from the left

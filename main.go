@@ -21,9 +21,16 @@ func formatTitle(title string) string {
 func main() {
 	var indentationString string
 	var depth int
+	var startBy int
 
 	flag.StringVar(&indentationString, "indent", "  ", "Indentation string ('  ','tab')")
-	flag.IntVar(&depth, "depth", 3, "Depth of the table of contents (1,2,...,6). 2 will print only H1 and H2")
+	flag.IntVar(
+		&depth,
+		"depth",
+		3,
+		"Depth of the table of contents (1,2,...,6). 2 will print only H1 and H2",
+	)
+	flag.IntVar(&startBy, "start-by", 1, "Start by specific header (1,2,...,6). 2 will start by H2")
 
 	flag.Parse()
 
@@ -50,6 +57,9 @@ func main() {
 
 		numberOfSpaces := len(string(section.SectionType)) - 1
 		if numberOfSpaces+1 > depth {
+			continue
+		}
+		if numberOfSpaces+1 < startBy {
 			continue
 		}
 		var str string
